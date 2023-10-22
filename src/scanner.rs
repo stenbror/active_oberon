@@ -120,7 +120,7 @@ enum Symbols {
 }
 
 pub trait ActiveOberonScannerMethods {
-    fn is_operator(ch1: char, ch2: char, ch3: char) -> Option<(Symbols, u8)>;
+    fn is_operator(ch1: char, ch2: char, ch3: char, pos: u32) -> Option<(Symbols, u8)>;
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -128,9 +128,55 @@ struct ActiveOberonScanner {
 
 }
 
-/// Scan for operator symbols in Active Oberon grammar
 impl ActiveOberonScannerMethods for ActiveOberonScanner {
-    fn is_operator(ch1: char, ch2: char, ch3: char) -> Option<(Symbols, u8)> {
-        todo!()
+    fn is_operator(ch1: char, ch2: char, ch3: char, pos: u32) -> Option<(Symbols, u8)> {
+        match (ch1, ch2, ch3) {
+            ( '.', '>', '=' )   => Some( (Symbols::DotGreaterEqual(pos, pos + 3), 3) ),
+            ( '.', '>', _ )     => Some( (Symbols::DotGreater(pos, pos + 2), 2) ),
+            ( '.', '<', '=' )   => Some( (Symbols::DotLessEqual(pos, pos + 3), 3) ),
+            ( '.', '<', _ )     => Some( (Symbols::DotLess(pos, pos + 2), 2) ),
+            ( '.', '.', _ )     => Some( (Symbols::Upto(pos, pos + 2), 2) ),
+            ( '.', '*', _ )     => Some( (Symbols::DotTimes(pos, pos + 2), 2) ),
+            ( '.', '/', _ )     => Some( (Symbols::DotSlash(pos, pos + 2), 2) ),
+            ( '.', '=', _ )     => Some( (Symbols::DotEqual(pos, pos + 2), 2) ),
+            ( '.', '#', _ )     => Some( (Symbols::DotUnequal(pos, pos + 2), 2) ),
+            ( '.', _ , _ )      => Some( (Symbols::Period(pos, pos + 1), 1) ),
+            ( '<', '=', _ )     => Some( (Symbols::LessEqual(pos, pos + 2), 2) ),
+            ( '<', _ , _ )      => Some( (Symbols::Less(pos, pos + 1), 1) ),
+            ( '>', '=', _ )     => Some( (Symbols::GreaterEqual(pos, pos + 2), 2) ),
+            ( '>', _ , _ )      => Some( (Symbols::Greater(pos, pos + 1), 1) ),
+            ( ':', '=', _ )     => Some( (Symbols::Becomes(pos, pos + 2), 2) ),
+            ( ':', _ , _ )      => Some( (Symbols::Colon(pos, pos + 1), 1) ),
+            ( '+', '*', _ )     => Some( (Symbols::PlusTimes(pos, pos + 2), 2) ),
+            ( '+', _ , _ )      => Some( (Symbols::Plus(pos, pos + 1), 1) ),
+            ( '*', '*', _ )     => Some( (Symbols::TimesTimes(pos, pos + 2), 2) ),
+            ( '*', _ , _ )      => Some( (Symbols::Times(pos, pos + 1), 1) ),
+            ( '?', '?', _ )     => Some( (Symbols::QuestionMarks(pos, pos + 2), 2) ),
+            ( '?', _ , _ )      => Some( (Symbols::QuestionMark(pos, pos + 1), 1) ),
+            ( '!', '!', _ )     => Some( (Symbols::ExclaimMarks(pos, pos + 2), 2) ),
+            ( '!', _ , _ )      => Some( (Symbols::ExclaimMark(pos, pos + 1), 1) ),
+            ( '\\', _ , '"' )   => None, /* Escaped string */
+            ( '\\', '"', _  )   => None,
+            ( '\\', _ , _ )     => Some( (Symbols::BackSlash(pos, pos + 1), 1) ),
+            ( '(', '*', _ )     => None, /* Comment start */
+            ( '(', _ , _ )      => Some( (Symbols::LeftParen(pos, pos + 1), 1) ),
+            ( ')', _ , _ )      => Some( (Symbols::RightParen(pos, pos + 1), 1) ),
+            ( '#', _ , _ )      => Some( (Symbols::NotEqual(pos, pos + 1), 1) ),
+            ( '&', _ , _ )      => Some( (Symbols::And(pos, pos + 1), 1) ),
+            ( ',', _ , _ )      => Some( (Symbols::Comma(pos, pos + 1), 1) ),
+            ( '-', _ , _ )      => Some( (Symbols::Minus(pos, pos + 1), 1) ),
+            ( '/', _ , _ )      => Some( (Symbols::Slash(pos, pos + 1), 1) ),
+            ( ';', _ , _ )      => Some( (Symbols::Semicolon(pos, pos + 1), 1) ),
+            ( '=', _ , _ )      => Some( (Symbols::Equal(pos, pos + 1), 1) ),
+            ( '[', _ , _ )      => Some( (Symbols::LeftBracket(pos, pos + 1), 1) ),
+            ( ']', _ , _ )      => Some( (Symbols::RightBracket(pos, pos + 1), 1) ),
+            ( '^', _ , _ )      => Some( (Symbols::Arrow(pos, pos + 1), 1) ),
+            ( '{', _ , _ )      => Some( (Symbols::LeftBrace(pos, pos + 1), 1) ),
+            ( '|', _ , _ )      => Some( (Symbols::Bar(pos, pos + 1), 1) ),
+            ( '}', _ , _ )      => Some( (Symbols::RightBrace(pos, pos + 1), 1) ),
+            ( '~', _ , _ )      => Some( (Symbols::Not(pos, pos + 1), 1) ),
+            ( '`', _ , _ )      => Some( (Symbols::Transpose(pos, pos + 1), 1) ),
+            _ => None
+        }
     }
 }
