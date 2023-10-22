@@ -1132,4 +1132,232 @@ mod tests {
             _ => assert!(false)
         }
     }
+
+    #[test]
+    fn operator_plus_times() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('+', '*', ' ', 0);
+        match res {
+            Some( ( Symbol::PlusTimes(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_plus() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('+', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::Plus(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_times_times() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('*', '*', ' ', 0);
+        match res {
+            Some( ( Symbol::TimesTimes(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_times() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('*', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::Times(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_question_marks() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('?', '?', ' ', 0);
+        match res {
+            Some( ( Symbol::QuestionMarks(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_question_mark() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('?', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::QuestionMark(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_exclaim_marks() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('!', '!', ' ', 0);
+        match res {
+            Some( ( Symbol::ExclaimMarks(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_exclaim_mark() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('!', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::ExclaimMark(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_back_slash() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('\\', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::BackSlash(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_left_paren() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('(', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::LeftParen(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_right_paren() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator(')', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::RightParen(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_left_bracket() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('[', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::LeftBracket(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_right_bracket() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator(']', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::RightBracket(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_left_brace() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('{', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::LeftBrace(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_right_curly() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('}', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::RightBrace(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_arrow() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('^', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::Arrow(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_bar() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('|', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::Bar(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_not() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('~', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::Not(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_transpose() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('`', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::Transpose(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
 }
