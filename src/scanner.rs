@@ -132,6 +132,7 @@ pub trait ActiveOberonScannerMethods {
     fn is_end_of_file(&self) -> bool;
     fn length(&self) -> u32;
     fn slice(&self, start: u32, end: u32) -> Option<String>;
+    fn is_literal_character(&self) -> bool;
     fn remove_whitespace(&mut self) -> ();
     fn is_operator(&self, ch1: char, ch2: char, ch3: char, pos: u32) -> Option<(Symbol, u8)>;
     fn is_reserved_keyword(&self, text: &str, pos: u32) -> Option<(Symbol, u8)>;
@@ -231,6 +232,13 @@ impl ActiveOberonScannerMethods for ActiveOberonScanner {
         }
 
         return Some(res);
+    }
+
+    fn is_literal_character(&self) -> bool {
+        match self.peek_char() {
+            'A' ..= 'Z' | 'a' ..= 'z' | '0' ..= '9' | '_' => true,
+            _ => false
+        }
     }
 
     fn remove_whitespace(&mut self) -> () {
@@ -396,6 +404,42 @@ impl ActiveOberonScannerMethods for ActiveOberonScanner {
                     }
                 }
                 return self.get_next_symbol()
+            },
+            _ => ()
+        }
+
+        /* Handle reserved keywords and name literals */
+        match c1 {
+            'A'..='Z' => {
+                while self.is_literal_character() {
+                    self.next()
+                }
+                let element = self.slice(pos, self.get_position() - 1);
+                match element {
+                    Some(text) => {
+                        let res = self.is_reserved_keyword(text.as_str(), pos);
+                        match res {
+                            Some((symb, step)) => {
+                                self.position = self.position + step as u32;
+                                return Ok(symb)
+                            },
+                            None  => return Ok(Symbol::Ident(pos, self.get_position() - 1, text))
+                        }
+                    },
+                    _ => ()
+                }
+            },
+            'a' ..= 'z' | '_' => {
+                while self.is_literal_character() {
+                    self.next()
+                }
+                let element = self.slice(pos, self.get_position() - 1);
+                match element {
+                    Some(text) => {
+                         return Ok(Symbol::Ident(pos, self.get_position() - 1, text))
+                    },
+                    _ => ()
+                }
             },
             _ => ()
         }
@@ -1557,5 +1601,26 @@ mod tests {
             },
             _ => assert!(false)
         }
+    }
+
+    #[test]
+    fn get_next_symbol_reserved_keyword() {
+        let mut scanner = ActiveOberonScanner::new();
+        scanner.set_text(" MODULE Test;");
+        let res = scanner.get_next_symbol();
+        match res {
+            Ok( Symbol::Module(1, 6) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+        //let res2 = scanner.get_next_symbol();
+        // let id = String::from("test");
+        // match res {
+        //     Ok( Symbol::Ident(8, 11, id) ) => {
+        //         assert!(true)
+        //     },
+        //     _ => assert!(false)
+        // }
     }
 }
