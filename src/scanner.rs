@@ -211,7 +211,7 @@ impl ActiveOberonScannerMethods for ActiveOberonScanner {
             "FALSE" => Some( ( Symbol::False(pos, pos + 4), 5 ) ),
             "FOR" => Some( ( Symbol::For(pos, pos + 2), 3 ) ),
             "FINALLY" => Some( ( Symbol::Finally(pos, pos + 6), 7 ) ),
-            "If" => Some( ( Symbol::If(pos, pos + 1), 2 ) ),
+            "IF" => Some( ( Symbol::If(pos, pos + 1), 2 ) ),
             "IGNORE" => Some( ( Symbol::Ignore(pos, pos + 5), 6 ) ),
             "IMAG" => Some( ( Symbol::Imag(pos, pos + 3), 4 ) ),
             "IN" => Some( ( Symbol::In(pos, pos + 1), 2 ) ),
@@ -239,7 +239,7 @@ impl ActiveOberonScannerMethods for ActiveOberonScanner {
             "UNTIL" => Some( ( Symbol::Until(pos, pos + 4), 5 ) ),
             "VAR" => Some( ( Symbol::Var(pos, pos + 2), 3 ) ),
             "WHILE" => Some( ( Symbol::While(pos, pos + 4), 5 ) ),
-            "With" => Some( ( Symbol::With(pos, pos + 3), 4 ) ),
+            "WITH" => Some( ( Symbol::With(pos, pos + 3), 4 ) ),
             "ANY" => Some( ( Symbol::Any(pos, pos + 2), 3 ) ),
             "ARRAY" => Some( ( Symbol::Array(pos, pos + 4), 5 ) ),
             "OBJECT" => Some( ( Symbol::Object(pos, pos + 5), 6 ) ),
@@ -491,6 +491,450 @@ mod tests {
         let res = scanner.is_reserved_keyword("FINALLY", 0);
         match res {
             Some( ( Symbol::Finally(0, 6), 7 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_if() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("IF", 0);
+        match res {
+            Some( ( Symbol::If(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_ignore() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("IGNORE", 0);
+        match res {
+            Some( ( Symbol::Ignore(0, 5), 6 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_imag() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("IMAG", 0);
+        match res {
+            Some( ( Symbol::Imag(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_in() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("IN", 0);
+        match res {
+            Some( ( Symbol::In(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_is() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("IS", 0);
+        match res {
+            Some( ( Symbol::Is(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_import() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("IMPORT", 0);
+        match res {
+            Some( ( Symbol::Import(0, 5), 6 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_loop() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("LOOP", 0);
+        match res {
+            Some( ( Symbol::Loop(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_module() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("MODULE", 0);
+        match res {
+            Some( ( Symbol::Module(0, 5), 6 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_mod() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("MOD", 0);
+        match res {
+            Some( ( Symbol::Mod(0, 2), 3 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_nil() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("NIL", 0);
+        match res {
+            Some( ( Symbol::Nil(0, 2), 3 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_of() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("OF", 0);
+        match res {
+            Some( ( Symbol::Of(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_or() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("OR", 0);
+        match res {
+            Some( ( Symbol::Or(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_out() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("OUT", 0);
+        match res {
+            Some( ( Symbol::Out(0, 2), 3 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_operator() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("OPERATOR", 0);
+        match res {
+            Some( ( Symbol::Operator(0, 7), 8 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_procedure() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("PROCEDURE", 0);
+        match res {
+            Some( ( Symbol::Procedure(0, 8), 9 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_port() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("PORT", 0);
+        match res {
+            Some( ( Symbol::Port(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_repeat() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("REPEAT", 0);
+        match res {
+            Some( ( Symbol::Repeat(0, 5), 6 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_return() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("RETURN", 0);
+        match res {
+            Some( ( Symbol::Return(0, 5), 6 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_self() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("SELF", 0);
+        match res {
+            Some( ( Symbol::Self_(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_new() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("NEW", 0);
+        match res {
+            Some( ( Symbol::New(0, 2), 3 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_result() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("RESULT", 0);
+        match res {
+            Some( ( Symbol::Result(0, 5), 6 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_then() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("THEN", 0);
+        match res {
+            Some( ( Symbol::Then(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_true() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("TRUE", 0);
+        match res {
+            Some( ( Symbol::True(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_to() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("TO", 0);
+        match res {
+            Some( ( Symbol::To(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_type() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("TYPE", 0);
+        match res {
+            Some( ( Symbol::Type(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_until() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("UNTIL", 0);
+        match res {
+            Some( ( Symbol::Until(0, 4), 5 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_var() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("VAR", 0);
+        match res {
+            Some( ( Symbol::Var(0, 2), 3) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_while() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("WHILE", 0);
+        match res {
+            Some( ( Symbol::While(0, 4), 5 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_with() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("WITH", 0);
+        match res {
+            Some( ( Symbol::With(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_any() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("ANY", 0);
+        match res {
+            Some( ( Symbol::Any(0, 2), 3 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_array() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("ARRAY", 0);
+        match res {
+            Some( ( Symbol::Array(0, 4), 5 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_object() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("OBJECT", 0);
+        match res {
+            Some( ( Symbol::Object(0, 5), 6 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_pointer() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("POINTER", 0);
+        match res {
+            Some( ( Symbol::Pointer(0, 6), 7 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_record() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("RECORD", 0);
+        match res {
+            Some( ( Symbol::Record(0, 5), 6 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_address() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("ADDRESS", 0);
+        match res {
+            Some( ( Symbol::Address(0, 6), 7 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_size() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("SIZE", 0);
+        match res {
+            Some( ( Symbol::Size(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_alias() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("ALIAS", 0);
+        match res {
+            Some( ( Symbol::Alias(0, 4), 5 ) ) => {
                 assert!(true)
             },
             _ => assert!(false)
