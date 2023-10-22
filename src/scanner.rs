@@ -121,8 +121,9 @@ enum Symbol {
 }
 
 pub trait ActiveOberonScannerMethods {
+    fn new() -> Self;
     fn is_operator(ch1: char, ch2: char, ch3: char, pos: u32) -> Option<(Symbol, u8)>;
-    fn is_reserved_keyword(text: &str, pos: u32) -> Option<(Symbol, u8)>;
+    fn is_reserved_keyword(&self, text: &str, pos: u32) -> Option<(Symbol, u8)>;
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -131,6 +132,12 @@ struct ActiveOberonScanner {
 }
 
 impl ActiveOberonScannerMethods for ActiveOberonScanner {
+    fn new() -> Self {
+        ActiveOberonScanner {
+
+        }
+    }
+
     fn is_operator(ch1: char, ch2: char, ch3: char, pos: u32) -> Option<(Symbol, u8)> {
         match (ch1, ch2, ch3) {
             ( '.', '>', '=' )   => Some( (Symbol::DotGreaterEqual(pos, pos + 3), 3) ),
@@ -182,7 +189,7 @@ impl ActiveOberonScannerMethods for ActiveOberonScanner {
         }
     }
 
-    fn is_reserved_keyword(text: &str, pos: u32) -> Option<(Symbol, u8)> {
+    fn is_reserved_keyword(&self, text: &str, pos: u32) -> Option<(Symbol, u8)> {
         match text {
             "AWAIT" => Some( ( Symbol::Await(pos, pos + 4), 5 ) ),
             "BEGIN" => Some( ( Symbol::Begin(pos, pos + 4), 5 ) ),
@@ -242,6 +249,47 @@ impl ActiveOberonScannerMethods for ActiveOberonScanner {
             "SIZE" => Some( ( Symbol::Size(pos, pos + 3), 4 ) ),
             "ALIAS" => Some( ( Symbol::Alias(pos, pos + 4), 5 ) ),
             _ => None
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn reserved_keyword_await() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("AWAIT", 0);
+        match res {
+            Some( ( Symbol::Await(0, 4), 5 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_begin() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("BEGIN", 0);
+        match res {
+            Some( ( Symbol::Begin(0, 4), 5 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_by() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("BY", 0);
+        match res {
+            Some( ( Symbol::By(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
         }
     }
 }
