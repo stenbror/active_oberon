@@ -122,19 +122,127 @@ pub enum Symbol {
 
 pub trait ActiveOberonScannerMethods {
     fn new() -> Self;
+    fn set_text(&mut self, text: &'static str ) -> ();
+    fn peek_char(&self) -> char;
+    fn peek_three_chars(&self) -> (char, char, char);
+    fn next(&mut self) -> ();
+    fn next_two(&mut self) -> ();
+    fn next_three(&mut self) -> ();
+    fn get_position(&self) -> u32;
+    fn is_end_of_file(&self) -> bool;
+    fn length(&self) -> u32;
+    fn slice(&self, start: u32, end: u32) -> Option<String>;
+    fn remove_whitespace(&mut self) -> ();
     fn is_operator(&self, ch1: char, ch2: char, ch3: char, pos: u32) -> Option<(Symbol, u8)>;
     fn is_reserved_keyword(&self, text: &str, pos: u32) -> Option<(Symbol, u8)>;
+    fn get_next_symbol(&mut self) -> Result<Symbol, String>;
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct ActiveOberonScanner {
-
+    buffer: Vec<char>,
+    position: u32
 }
 
 impl ActiveOberonScannerMethods for ActiveOberonScanner {
+
     fn new() -> Self {
         ActiveOberonScanner {
+            buffer : Vec::new(),
+            position: 0
+        }
+    }
 
+    fn set_text(&mut self, text: &'static str) -> () {
+        self.buffer = text.chars().collect()
+    }
+
+    fn peek_char(&self) -> char {
+        match self.buffer.get(self.get_position() as usize) {
+            Some(x) => {
+                return x.clone()
+            },
+            _ => '\0'
+        }
+    }
+
+    fn peek_three_chars(&self) -> (char, char, char) {
+        let c1 = match self.buffer.get(self.get_position() as usize) {
+            Some(x) => x.clone(),
+            _ => ' '
+        };
+        let c2 = match self.buffer.get((self.get_position() + 1) as usize) {
+            Some(x) => x.clone(),
+            _ => ' '
+        };
+        let c3 = match self.buffer.get((self.get_position() + 2) as usize) {
+            Some(x) => x.clone(),
+            _ => ' '
+        };
+        (c1, c2, c3)
+    }
+
+    fn next(&mut self) -> () {
+        if self.get_position() <= (self.length() - 1) {
+            self.position = self.get_position() + 1;
+        }
+    }
+
+    fn next_two(&mut self) -> () {
+        if self.get_position() <= (self.length() - 2) {
+            self.position = self.get_position() + 2;
+        }
+    }
+
+    fn next_three(&mut self) -> () {
+        if self.get_position() <= (self.length() - 3) {
+            self.position = self.get_position() + 3;
+        }
+    }
+
+    fn get_position(&self) -> u32 {
+        self.position
+    }
+
+    fn is_end_of_file(&self) -> bool {
+        self.get_position() >= self.length()
+    }
+
+    fn length(&self) -> u32 {
+        self.buffer.len() as u32
+    }
+
+    fn slice(&self, start: u32, end: u32) -> Option<String> {
+        let mut res = String::new();
+        let mut index = start;
+
+        if start > end || end >= self.length() {
+            return None
+        }
+
+        while index <= end {
+            match self.buffer.get(index as usize) {
+                Some(x) => {
+                    res.push(x.clone());
+                    index = index + 1
+                },
+                _ => return None
+            }
+        }
+
+        return Some(res);
+    }
+
+    fn remove_whitespace(&mut self) -> () {
+        loop {
+            let ( c1, c2, c3 ) = self.peek_three_chars();
+            match ( c1, c2, c3 ) {
+                ( ' ', _ , _ ) => self.next(),
+                ( '\t', _ , _ ) => self.next(),
+                ( '\r', '\n' , _ ) => self.next_two(),
+                ( '\r', _ , _ ) | ( '\n', _ , _ ) => self.next(),
+                _ => break
+            }
         }
     }
 
@@ -251,11 +359,62 @@ impl ActiveOberonScannerMethods for ActiveOberonScanner {
             _ => None
         }
     }
+
+    fn get_next_symbol(&mut self) -> Result<Symbol, String> {
+        self.remove_whitespace();
+        let pos = self.get_position();
+        let (c1, c2, c3) = self.peek_three_chars();
+
+        /*  Check for valid operators */
+        let res_operator= self.is_operator(c1, c2, c3, pos);
+        match res_operator {
+            Some( (symb, step) ) => {
+                self.position = self.position + step as u32;
+                return Ok(symb)
+            },
+            _ => ()
+        }
+
+        /* Check for comment start */
+        match (c1, c2) {
+            ( '(' , '*' ) => {
+                let mut level = 1;
+                self.next_two();
+                loop {
+                    match self.peek_three_chars() {
+                        ( '(', '*' , _ ) => {
+                            level = level + 1;
+                            self.next_two()
+                        },
+                        ( '*', ')', _ ) => {
+                            level = level - 1;
+                            self.next_two();
+                            if level <= 0  { break }
+                        },
+                        ( '\0', _ , _  ) => return Err(String::from("")),
+                        _ => self.next()
+                    }
+                }
+                return self.get_next_symbol()
+            },
+            _ => ()
+        }
+
+        todo!()
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn create_buffer_from_text_and_check_length() {
+        let mut scanner = ActiveOberonScanner::new();
+        scanner.set_text("MODULE InOut;");
+
+        assert_eq!(scanner.length(), 13);
+    }
 
     #[test]
     fn reserved_keyword_await() {
@@ -1355,6 +1514,45 @@ mod tests {
         let res = scanner.is_operator('`', ' ', ' ', 0);
         match res {
             Some( ( Symbol::Transpose(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn get_next_symbol_less_with_comment() {
+        let mut scanner = ActiveOberonScanner::new();
+        scanner.set_text("  (* This is a comment *)  < 8");
+        let res = scanner.get_next_symbol();
+        match res {
+            Ok( Symbol::Less(27, 27) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn get_next_symbol_less_with_multiple_comment() {
+        let mut scanner = ActiveOberonScanner::new();
+        scanner.set_text("  (* This is (* a *) comment *)  < 8");
+        let res = scanner.get_next_symbol();
+        match res {
+            Ok( Symbol::Less(33, 33) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn get_next_symbol_less_equal() {
+        let mut scanner = ActiveOberonScanner::new();
+        scanner.set_text("    <= 34");
+        let res = scanner.get_next_symbol();
+        match res {
+            Ok( Symbol::LessEqual(4, 5) ) => {
                 assert!(true)
             },
             _ => assert!(false)
