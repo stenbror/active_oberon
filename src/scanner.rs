@@ -1,6 +1,6 @@
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-enum Symbol {
+pub enum Symbol {
     /* Reserved keywords */
     Await(u32, u32),
     Begin(u32, u32),
@@ -122,7 +122,7 @@ enum Symbol {
 
 pub trait ActiveOberonScannerMethods {
     fn new() -> Self;
-    fn is_operator(ch1: char, ch2: char, ch3: char, pos: u32) -> Option<(Symbol, u8)>;
+    fn is_operator(&self, ch1: char, ch2: char, ch3: char, pos: u32) -> Option<(Symbol, u8)>;
     fn is_reserved_keyword(&self, text: &str, pos: u32) -> Option<(Symbol, u8)>;
 }
 
@@ -138,53 +138,53 @@ impl ActiveOberonScannerMethods for ActiveOberonScanner {
         }
     }
 
-    fn is_operator(ch1: char, ch2: char, ch3: char, pos: u32) -> Option<(Symbol, u8)> {
+    fn is_operator(&self, ch1: char, ch2: char, ch3: char, pos: u32) -> Option<(Symbol, u8)> {
         match (ch1, ch2, ch3) {
-            ( '.', '>', '=' )   => Some( (Symbol::DotGreaterEqual(pos, pos + 3), 3) ),
-            ( '.', '>', _ )     => Some( (Symbol::DotGreater(pos, pos + 2), 2) ),
-            ( '.', '<', '=' )   => Some( (Symbol::DotLessEqual(pos, pos + 3), 3) ),
-            ( '.', '<', _ )     => Some( (Symbol::DotLess(pos, pos + 2), 2) ),
-            ( '.', '.', _ )     => Some( (Symbol::Upto(pos, pos + 2), 2) ),
-            ( '.', '*', _ )     => Some( (Symbol::DotTimes(pos, pos + 2), 2) ),
-            ( '.', '/', _ )     => Some( (Symbol::DotSlash(pos, pos + 2), 2) ),
-            ( '.', '=', _ )     => Some( (Symbol::DotEqual(pos, pos + 2), 2) ),
-            ( '.', '#', _ )     => Some( (Symbol::DotUnequal(pos, pos + 2), 2) ),
-            ( '.', _ , _ )      => Some( (Symbol::Period(pos, pos + 1), 1) ),
-            ( '<', '=', _ )     => Some( (Symbol::LessEqual(pos, pos + 2), 2) ),
-            ( '<', _ , _ )      => Some( (Symbol::Less(pos, pos + 1), 1) ),
-            ( '>', '=', _ )     => Some( (Symbol::GreaterEqual(pos, pos + 2), 2) ),
-            ( '>', _ , _ )      => Some( (Symbol::Greater(pos, pos + 1), 1) ),
-            ( ':', '=', _ )     => Some( (Symbol::Becomes(pos, pos + 2), 2) ),
-            ( ':', _ , _ )      => Some( (Symbol::Colon(pos, pos + 1), 1) ),
-            ( '+', '*', _ )     => Some( (Symbol::PlusTimes(pos, pos + 2), 2) ),
-            ( '+', _ , _ )      => Some( (Symbol::Plus(pos, pos + 1), 1) ),
-            ( '*', '*', _ )     => Some( (Symbol::TimesTimes(pos, pos + 2), 2) ),
-            ( '*', _ , _ )      => Some( (Symbol::Times(pos, pos + 1), 1) ),
-            ( '?', '?', _ )     => Some( (Symbol::QuestionMarks(pos, pos + 2), 2) ),
-            ( '?', _ , _ )      => Some( (Symbol::QuestionMark(pos, pos + 1), 1) ),
-            ( '!', '!', _ )     => Some( (Symbol::ExclaimMarks(pos, pos + 2), 2) ),
-            ( '!', _ , _ )      => Some( (Symbol::ExclaimMark(pos, pos + 1), 1) ),
+            ( '.', '>', '=' )   => Some( (Symbol::DotGreaterEqual(pos, pos + 2), 3) ),
+            ( '.', '>', _ )     => Some( (Symbol::DotGreater(pos, pos + 1), 2) ),
+            ( '.', '<', '=' )   => Some( (Symbol::DotLessEqual(pos, pos + 2), 3) ),
+            ( '.', '<', _ )     => Some( (Symbol::DotLess(pos, pos + 1), 2) ),
+            ( '.', '.', _ )     => Some( (Symbol::Upto(pos, pos + 1), 2) ),
+            ( '.', '*', _ )     => Some( (Symbol::DotTimes(pos, pos + 1), 2) ),
+            ( '.', '/', _ )     => Some( (Symbol::DotSlash(pos, pos + 1), 2) ),
+            ( '.', '=', _ )     => Some( (Symbol::DotEqual(pos, pos + 1), 2) ),
+            ( '.', '#', _ )     => Some( (Symbol::DotUnequal(pos, pos + 1), 2) ),
+            ( '.', _ , _ )      => Some( (Symbol::Period(pos, pos), 1) ),
+            ( '<', '=', _ )     => Some( (Symbol::LessEqual(pos, pos + 1), 2) ),
+            ( '<', _ , _ )      => Some( (Symbol::Less(pos, pos), 1) ),
+            ( '>', '=', _ )     => Some( (Symbol::GreaterEqual(pos, pos + 1), 2) ),
+            ( '>', _ , _ )      => Some( (Symbol::Greater(pos, pos), 1) ),
+            ( ':', '=', _ )     => Some( (Symbol::Becomes(pos, pos + 1), 2) ),
+            ( ':', _ , _ )      => Some( (Symbol::Colon(pos, pos), 1) ),
+            ( '+', '*', _ )     => Some( (Symbol::PlusTimes(pos, pos + 1), 2) ),
+            ( '+', _ , _ )      => Some( (Symbol::Plus(pos, pos), 1) ),
+            ( '*', '*', _ )     => Some( (Symbol::TimesTimes(pos, pos + 1), 2) ),
+            ( '*', _ , _ )      => Some( (Symbol::Times(pos, pos), 1) ),
+            ( '?', '?', _ )     => Some( (Symbol::QuestionMarks(pos, pos + 1), 2) ),
+            ( '?', _ , _ )      => Some( (Symbol::QuestionMark(pos, pos), 1) ),
+            ( '!', '!', _ )     => Some( (Symbol::ExclaimMarks(pos, pos + 1), 2) ),
+            ( '!', _ , _ )      => Some( (Symbol::ExclaimMark(pos, pos), 1) ),
             ( '\\', _ , '"' )   => None, /* Escaped string */
             ( '\\', '"', _  )   => None,
-            ( '\\', _ , _ )     => Some( (Symbol::BackSlash(pos, pos + 1), 1) ),
+            ( '\\', _ , _ )     => Some( (Symbol::BackSlash(pos, pos), 1) ),
             ( '(', '*', _ )     => None, /* Comment start */
-            ( '(', _ , _ )      => Some( (Symbol::LeftParen(pos, pos + 1), 1) ),
-            ( ')', _ , _ )      => Some( (Symbol::RightParen(pos, pos + 1), 1) ),
-            ( '#', _ , _ )      => Some( (Symbol::NotEqual(pos, pos + 1), 1) ),
-            ( '&', _ , _ )      => Some( (Symbol::And(pos, pos + 1), 1) ),
-            ( ',', _ , _ )      => Some( (Symbol::Comma(pos, pos + 1), 1) ),
-            ( '-', _ , _ )      => Some( (Symbol::Minus(pos, pos + 1), 1) ),
-            ( '/', _ , _ )      => Some( (Symbol::Slash(pos, pos + 1), 1) ),
-            ( ';', _ , _ )      => Some( (Symbol::Semicolon(pos, pos + 1), 1) ),
-            ( '=', _ , _ )      => Some( (Symbol::Equal(pos, pos + 1), 1) ),
-            ( '[', _ , _ )      => Some( (Symbol::LeftBracket(pos, pos + 1), 1) ),
-            ( ']', _ , _ )      => Some( (Symbol::RightBracket(pos, pos + 1), 1) ),
-            ( '^', _ , _ )      => Some( (Symbol::Arrow(pos, pos + 1), 1) ),
-            ( '{', _ , _ )      => Some( (Symbol::LeftBrace(pos, pos + 1), 1) ),
-            ( '|', _ , _ )      => Some( (Symbol::Bar(pos, pos + 1), 1) ),
-            ( '}', _ , _ )      => Some( (Symbol::RightBrace(pos, pos + 1), 1) ),
-            ( '~', _ , _ )      => Some( (Symbol::Not(pos, pos + 1), 1) ),
-            ( '`', _ , _ )      => Some( (Symbol::Transpose(pos, pos + 1), 1) ),
+            ( '(', _ , _ )      => Some( (Symbol::LeftParen(pos, pos), 1) ),
+            ( ')', _ , _ )      => Some( (Symbol::RightParen(pos, pos), 1) ),
+            ( '#', _ , _ )      => Some( (Symbol::NotEqual(pos, pos), 1) ),
+            ( '&', _ , _ )      => Some( (Symbol::And(pos, pos), 1) ),
+            ( ',', _ , _ )      => Some( (Symbol::Comma(pos, pos), 1) ),
+            ( '-', _ , _ )      => Some( (Symbol::Minus(pos, pos), 1) ),
+            ( '/', _ , _ )      => Some( (Symbol::Slash(pos, pos), 1) ),
+            ( ';', _ , _ )      => Some( (Symbol::Semicolon(pos, pos), 1) ),
+            ( '=', _ , _ )      => Some( (Symbol::Equal(pos, pos), 1) ),
+            ( '[', _ , _ )      => Some( (Symbol::LeftBracket(pos, pos), 1) ),
+            ( ']', _ , _ )      => Some( (Symbol::RightBracket(pos, pos), 1) ),
+            ( '^', _ , _ )      => Some( (Symbol::Arrow(pos, pos), 1) ),
+            ( '{', _ , _ )      => Some( (Symbol::LeftBrace(pos, pos), 1) ),
+            ( '|', _ , _ )      => Some( (Symbol::Bar(pos, pos), 1) ),
+            ( '}', _ , _ )      => Some( (Symbol::RightBrace(pos, pos), 1) ),
+            ( '~', _ , _ )      => Some( (Symbol::Not(pos, pos), 1) ),
+            ( '`', _ , _ )      => Some( (Symbol::Transpose(pos, pos), 1) ),
             _ => None
         }
     }
@@ -935,6 +935,198 @@ mod tests {
         let res = scanner.is_reserved_keyword("ALIAS", 0);
         match res {
             Some( ( Symbol::Alias(0, 4), 5 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_dot_greater_equal() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('.', '>', '=', 0);
+        match res {
+            Some( ( Symbol::DotGreaterEqual(0, 2), 3 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_dot_greater() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('.', '>', ' ', 0);
+        match res {
+            Some( ( Symbol::DotGreater(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_dot_less_equal() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('.', '<', '=', 0);
+        match res {
+            Some( ( Symbol::DotLessEqual(0, 2), 3 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_dot_less() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('.', '<', ' ', 0);
+        match res {
+            Some( ( Symbol::DotLess(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_upto() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('.', '.', ' ', 0);
+        match res {
+            Some( ( Symbol::Upto(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_dot_star() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('.', '*', ' ', 0);
+        match res {
+            Some( ( Symbol::DotTimes(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_dot_slash() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('.', '/', ' ', 0);
+        match res {
+            Some( ( Symbol::DotSlash(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_dot_equal() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('.', '=', ' ', 0);
+        match res {
+            Some( ( Symbol::DotEqual(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_dot_unequal() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('.', '#', ' ', 0);
+        match res {
+            Some( ( Symbol::DotUnequal(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_dot_period() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('.', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::Period(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_less_equal() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('<', '=', ' ', 0);
+        match res {
+            Some( ( Symbol::LessEqual(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_less() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('<', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::Less(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_greater_equal() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('>', '=', ' ', 0);
+        match res {
+            Some( ( Symbol::GreaterEqual(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_greater() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator('>', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::Greater(0, 0), 1 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_becomes() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator(':', '=', ' ', 0);
+        match res {
+            Some( ( Symbol::Becomes(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_comma() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_operator(':', ' ', ' ', 0);
+        match res {
+            Some( ( Symbol::Comma(0, 0), 1 ) ) => {
                 assert!(true)
             },
             _ => assert!(false)
