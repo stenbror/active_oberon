@@ -197,7 +197,7 @@ impl ActiveOberonScannerMethods for ActiveOberonScanner {
             "CONST" => Some( ( Symbol::Const(pos, pos + 4), 5 ) ),
             "CASE" => Some( ( Symbol::Case(pos, pos + 3), 4 ) ),
             "CELL" => Some( ( Symbol::Cell(pos, pos + 3), 4 ) ),
-            "CELLNET" => Some( ( Symbol::Cellnet(pos, pos + 6), 5 ) ),
+            "CELLNET" => Some( ( Symbol::Cellnet(pos, pos + 6), 7 ) ),
             "CODE" => Some( ( Symbol::Code(pos, pos + 3), 4 ) ),
             "DEFINITION" => Some( ( Symbol::Definition(pos, pos + 9), 10 ) ),
             "DO" => Some( ( Symbol::Do(pos, pos + 1), 2 ) ),
@@ -287,6 +287,210 @@ mod tests {
         let res = scanner.is_reserved_keyword("BY", 0);
         match res {
             Some( ( Symbol::By(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_const() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("CONST", 0);
+        match res {
+            Some( ( Symbol::Const(0, 4), 5 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_case() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("CASE", 0);
+        match res {
+            Some( ( Symbol::Case(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_cell() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("CELL", 0);
+        match res {
+            Some( ( Symbol::Cell(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_cellnet() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("CELLNET", 0);
+        match res {
+            Some( ( Symbol::Cellnet(0, 6), 7 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_code() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("CODE", 0);
+        match res {
+            Some( ( Symbol::Code(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_definition() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("DEFINITION", 0);
+        match res {
+            Some( ( Symbol::Definition(0, 9), 10 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_do() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("DO", 0);
+        match res {
+            Some( ( Symbol::Do(0, 1), 2 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_div() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("DIV", 0);
+        match res {
+            Some( ( Symbol::Div(0, 2), 3 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_end() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("END", 0);
+        match res {
+            Some( ( Symbol::End(0, 2), 3 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_enum() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("ENUM", 0);
+        match res {
+            Some( ( Symbol::Enum(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_else() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("ELSE", 0);
+        match res {
+            Some( ( Symbol::Else(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_elsif() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("ELSIF", 0);
+        match res {
+            Some( ( Symbol::Elsif(0, 4), 5 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_exit() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("EXIT", 0);
+        match res {
+            Some( ( Symbol::Exit(0, 3), 4 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_extern() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("EXTERN", 0);
+        match res {
+            Some( ( Symbol::Extern(0, 5), 6 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_false() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("FALSE", 0);
+        match res {
+            Some( ( Symbol::False(0, 4), 5 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_for() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("FOR", 0);
+        match res {
+            Some( ( Symbol::For(0, 2), 3 ) ) => {
+                assert!(true)
+            },
+            _ => assert!(false)
+        }
+    }
+
+    #[test]
+    fn reserved_keyword_finally() {
+        let scanner = ActiveOberonScanner::new();
+        let res = scanner.is_reserved_keyword("FINALLY", 0);
+        match res {
+            Some( ( Symbol::Finally(0, 6), 7 ) ) => {
                 assert!(true)
             },
             _ => assert!(false)
