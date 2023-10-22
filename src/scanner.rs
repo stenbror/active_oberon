@@ -1122,11 +1122,11 @@ mod tests {
     }
 
     #[test]
-    fn operator_comma() {
+    fn operator_colon() {
         let scanner = ActiveOberonScanner::new();
         let res = scanner.is_operator(':', ' ', ' ', 0);
         match res {
-            Some( ( Symbol::Comma(0, 0), 1 ) ) => {
+            Some( ( Symbol::Colon(0, 0), 1 ) ) => {
                 assert!(true)
             },
             _ => assert!(false)
