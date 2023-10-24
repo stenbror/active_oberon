@@ -366,7 +366,21 @@ impl ActiveOberonScannerMethods for ActiveOberonScanner {
                     }
                 }
                 self.is_reserved_keyword_or_literal(text, line, col)
-            }
+            },
+            'a'..='z' | '_' => {
+                let mut text : Vec<char> = Vec::new();
+                text.push(ch);
+                loop {
+                    match self.peek_char() {
+                        'a'..='z' | 'A'..='Z' | '_' | '0'..='9' => {
+                            ( ch, _ , _ ) = self.get_char();
+                            text.push(ch)
+                        },
+                        _ => break
+                    }
+                }
+                Ok(Symbol::Ident(line, col, String::from_iter(text)))
+            },
             _ => Err(format!("Lexical Error => Line: {}, Col: {} - Unknown character '{}' found in source code!", line, col, ch ))
         }
     }
@@ -506,6 +520,68 @@ mod tests {
     }
 
     #[test]
+    fn scanner_operator_right_paren() {
+        let mut scanner = ActiveOberonScanner::new(")");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::RightParen(1,1)))
+    }
+
+    #[test]
+    fn scanner_operator_times() {
+        let mut scanner = ActiveOberonScanner::new("*");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Times(1,1)))
+    }
+
+    #[test]
+    fn scanner_operator_times_times() {
+        let mut scanner = ActiveOberonScanner::new("**");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::TimesTimes(1,1)))
+    }
+
+    #[test]
+    fn scanner_operator_plus() {
+        let mut scanner = ActiveOberonScanner::new("+");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Plus(1,1)))
+    }
+
+    #[test]
+    fn scanner_operator_plus_times() {
+        let mut scanner = ActiveOberonScanner::new("+*");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::PlusTimes(1,1)))
+    }
+
+    #[test]
+    fn scanner_operator_comma() {
+        let mut scanner = ActiveOberonScanner::new(",");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Comma(1,1)))
+    }
+
+    #[test]
+    fn scanner_operator_minus() {
+        let mut scanner = ActiveOberonScanner::new("-");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Minus(1,1)))
+    }
+
+    #[test]
+    fn scanner_operator_period() {
+        let mut scanner = ActiveOberonScanner::new(".");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Period(1,1)))
+    }
+
+    #[test]
+    fn scanner_operator_upto() {
+        let mut scanner = ActiveOberonScanner::new("..");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Upto(1,1)))
+    }
+
+    #[test]
+    fn scanner_operator_dot_times() {
+        let mut scanner = ActiveOberonScanner::new(".*");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::DotTimes(1,1)))
+    }
+
+
+
+    #[test]
     fn scanner_comment_single() {
         let mut scanner = ActiveOberonScanner::new("(* This is a single comment *)");
         assert_eq!(scanner.get_next_symbol(), Ok(Symbol::EOF))
@@ -531,6 +607,18 @@ mod tests {
     fn scanner_indent_await__whitespace() {
         let mut scanner = ActiveOberonScanner::new("  AWAIT_");
         assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Ident(1,3, "AWAIT_".to_string())))
+    }
+
+    #[test]
+    fn scanner_indent_lowercase() {
+        let mut scanner = ActiveOberonScanner::new("  __init__");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Ident(1,3, "__init__".to_string())))
+    }
+
+    #[test]
+    fn scanner_indent_lowercase_non_special_character() {
+        let mut scanner = ActiveOberonScanner::new("  to_Test123");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Ident(1,3, "to_Test123".to_string())))
     }
 
     #[test]
