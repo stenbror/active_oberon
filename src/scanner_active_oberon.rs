@@ -533,5 +533,340 @@ mod tests {
         assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Ident(1,3, "AWAIT_".to_string())))
     }
 
+    #[test]
+    fn scanner_keyword_begin() {
+        let mut scanner = ActiveOberonScanner::new("BEGIN");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Begin(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_by() {
+        let mut scanner = ActiveOberonScanner::new("BY");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::By(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_const() {
+        let mut scanner = ActiveOberonScanner::new("CONST");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Const(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_case() {
+        let mut scanner = ActiveOberonScanner::new("CASE");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Case(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_cell() {
+        let mut scanner = ActiveOberonScanner::new("CELL");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Cell(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_cellnet() {
+        let mut scanner = ActiveOberonScanner::new("CELLNET");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Cellnet(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_code() {
+        let mut scanner = ActiveOberonScanner::new("CODE");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Code(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_definition() {
+        let mut scanner = ActiveOberonScanner::new("DEFINITION");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Definition(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_do() {
+        let mut scanner = ActiveOberonScanner::new("DO");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Do(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_div() {
+        let mut scanner = ActiveOberonScanner::new("DIV");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Div(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_end() {
+        let mut scanner = ActiveOberonScanner::new("END");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::End(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_enum() {
+        let mut scanner = ActiveOberonScanner::new("ENUM");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Enum(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_else() {
+        let mut scanner = ActiveOberonScanner::new("ELSE");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Else(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_elsif() {
+        let mut scanner = ActiveOberonScanner::new("ELSIF");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Elsif(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_exit() {
+        let mut scanner = ActiveOberonScanner::new("EXIT");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Exit(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_extern() {
+        let mut scanner = ActiveOberonScanner::new("EXTERN");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Extern(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_false() {
+        let mut scanner = ActiveOberonScanner::new("FALSE");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::False(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_for() {
+        let mut scanner = ActiveOberonScanner::new("FOR");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::For(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_finally() {
+        let mut scanner = ActiveOberonScanner::new("FINALLY");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Finally(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_if() {
+        let mut scanner = ActiveOberonScanner::new("IF");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::If(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_ignore() {
+        let mut scanner = ActiveOberonScanner::new("IGNORE");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Ignore(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_imag() {
+        let mut scanner = ActiveOberonScanner::new("IMAG");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Imag(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_in() {
+        let mut scanner = ActiveOberonScanner::new("IN");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::In(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_is() {
+        let mut scanner = ActiveOberonScanner::new("IS");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Is(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_import() {
+        let mut scanner = ActiveOberonScanner::new("IMPORT");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Import(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_loop() {
+        let mut scanner = ActiveOberonScanner::new("LOOP");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Loop(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_module() {
+        let mut scanner = ActiveOberonScanner::new("MODULE");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Module(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_mod() {
+        let mut scanner = ActiveOberonScanner::new("MOD");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Mod(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_nil() {
+        let mut scanner = ActiveOberonScanner::new("NIL");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Nil(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_of() {
+        let mut scanner = ActiveOberonScanner::new("OF");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Of(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_or() {
+        let mut scanner = ActiveOberonScanner::new("OR");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Or(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_out() {
+        let mut scanner = ActiveOberonScanner::new("OUT");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Out(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_operator() {
+        let mut scanner = ActiveOberonScanner::new("OPERATOR");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Operator(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_procedure() {
+        let mut scanner = ActiveOberonScanner::new("PROCEDURE");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Procedure(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_port() {
+        let mut scanner = ActiveOberonScanner::new("PORT");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Port(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_repeat() {
+        let mut scanner = ActiveOberonScanner::new("REPEAT");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Repeat(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_return() {
+        let mut scanner = ActiveOberonScanner::new("RETURN");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Return(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_self() {
+        let mut scanner = ActiveOberonScanner::new("SELF");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Self_(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_new() {
+        let mut scanner = ActiveOberonScanner::new("NEW");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::New(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_result() {
+        let mut scanner = ActiveOberonScanner::new("RESULT");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Result(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_then() {
+        let mut scanner = ActiveOberonScanner::new("THEN");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Then(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_true() {
+        let mut scanner = ActiveOberonScanner::new("TRUE");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::True(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_to() {
+        let mut scanner = ActiveOberonScanner::new("TO");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::To(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_type() {
+        let mut scanner = ActiveOberonScanner::new("TYPE");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Type(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_until() {
+        let mut scanner = ActiveOberonScanner::new("UNTIL");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Until(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_var() {
+        let mut scanner = ActiveOberonScanner::new("VAR");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Var(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_while() {
+        let mut scanner = ActiveOberonScanner::new("WHILE");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::While(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_with() {
+        let mut scanner = ActiveOberonScanner::new("WITH");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::With(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_any() {
+        let mut scanner = ActiveOberonScanner::new("ANY");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Any(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_array() {
+        let mut scanner = ActiveOberonScanner::new("ARRAY");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Array(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_object() {
+        let mut scanner = ActiveOberonScanner::new("OBJECT");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Object(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_pointer() {
+        let mut scanner = ActiveOberonScanner::new("POINTER");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Pointer(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_record() {
+        let mut scanner = ActiveOberonScanner::new("RECORD");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Record(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_address() {
+        let mut scanner = ActiveOberonScanner::new("ADDRESS");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Address(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_size() {
+        let mut scanner = ActiveOberonScanner::new("SIZE");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Size(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_alias() {
+        let mut scanner = ActiveOberonScanner::new("ALIAS");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Alias(1,1)))
+    }
 
 }
