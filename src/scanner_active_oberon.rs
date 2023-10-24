@@ -152,6 +152,47 @@ impl ActiveOberonScannerMethods for ActiveOberonScanner {
                 }
             }
             ';' => Ok(Symbol::Semicolon(line, col)),
+            '<' => {
+                let ch2 = self.peek_char();
+                match ch2 {
+                    '=' => {
+                        ( _ , _ , _ ) = self.get_char();
+                        Ok(Symbol::LessEqual(line, col))
+                    },
+                    '<' => {
+                        let ch3 = self.peek_char();
+                        match ch3 {
+                            '?' => {
+                                ( _ , _ , _ ) = self.get_char();
+                                Ok(Symbol::LessLessQ(line, col))
+                            },
+                            _ => Ok(Symbol::LessLess(line, col))
+                        }
+                    },
+                    _ => Ok(Symbol::Less(line, col))
+                }
+            },
+            '=' => Ok(Symbol::Equal(line, col)),
+            '>' => {
+                let ch2 = self.peek_char();
+                match ch2 {
+                    '=' => {
+                        ( _ , _ , _ ) = self.get_char();
+                        Ok(Symbol::GreaterEqual(line, col))
+                    },
+                    '>' => {
+                        let ch3 = self.peek_char();
+                        match ch3 {
+                            '?' => {
+                                ( _ , _ , _ ) = self.get_char();
+                                Ok(Symbol::GreaterGreaterQ(line, col))
+                            },
+                            _ => Ok(Symbol::GreaterGreater(line, col))
+                        }
+                    },
+                    _ => Ok(Symbol::Greater(line, col))
+                }
+            },
             _ => Err(format!("Lexical Error => Line: {}, Col: {} - Unknown character '{}' found in source code!", line, col, ch ))
         }
     }
