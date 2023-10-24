@@ -124,6 +124,7 @@ pub enum Symbol {
 pub trait ActiveOberonScannerMethods {
     fn new(text: &'static str) -> Self;
     fn get_next_symbol(&mut self) -> Result<Symbol, String>;
+    fn is_reserved_keyword_or_literal(&self, buf: Vec<char>, line: u32, col: u32) -> Result<Symbol, String>;
     fn get_char(&mut self) -> (char, u32, u32);
     fn peek_char(&self) -> char;
 
@@ -166,34 +167,35 @@ impl ActiveOberonScannerMethods for ActiveOberonScanner {
                 match ch2 {
                     '*' => {
                         let mut level = 1;
-                        (ch, line, col) = self.get_char();
+                        ( _ , _ , _ ) = self.get_char();
                         loop {
                             ch2 = self.peek_char();
                             match ch2 {
                                 '*' => {
-                                    (ch, line, col) = self.get_char();
+                                    ( _ , _ , _ ) = self.get_char();
                                     ch2 = self.peek_char();
                                     match ch2 {
                                         ')' => {
                                             level = level - 1;
+                                            ( _ , _ , _ ) = self.get_char();
                                             if level <= 0 { break }
-                                            (ch, line, col) = self.get_char();
+                                            ( _ , _ , _ ) = self.get_char()
                                         },
-                                        _ => (ch, line, col) = self.get_char()
+                                        _ => ( _ , _ , _ ) = self.get_char()
                                     }
                                 },
                                 '(' => {
                                     ch2 = self.peek_char();
                                     match ch2 {
                                         '*' => {
-                                            (ch, line, col) = self.get_char();
+                                            ( _ , _ , _ ) = self.get_char();
                                             level = level + 1
                                         },
-                                        _ => (ch, line, col) = self.get_char()
+                                        _ => ( _ , _ , _ ) = self.get_char()
                                     }
                                 },
                                 '\0' => return Err(format!("Lexical Error => Line: {}, Col: {} - Unterminated comment!", line, col )),
-                                _ => (ch, line, col) = self.get_char()
+                                _ => ( _ , _ , _ ) = self.get_char()
                             }
                         }
                         self.get_next_symbol()
@@ -351,7 +353,30 @@ impl ActiveOberonScannerMethods for ActiveOberonScanner {
                     _ => Ok(Symbol::ExclaimMark(line, col))
                 }
             },
+            'A'..='Z' => {
+                let mut text : Vec<char> = Vec::new();
+                text.push(ch);
+                loop {
+                    match self.peek_char() {
+                        'a'..='z' | 'A'..='Z' | '_' | '0'..='9' => {
+                            ( ch, _ , _ ) = self.get_char();
+                            text.push(ch)
+                        },
+                        _ => break
+                    }
+                }
+                self.is_reserved_keyword_or_literal(text, line, col)
+            }
             _ => Err(format!("Lexical Error => Line: {}, Col: {} - Unknown character '{}' found in source code!", line, col, ch ))
+        }
+    }
+
+    fn is_reserved_keyword_or_literal(&self, buf: Vec<char>, line: u32, col: u32) -> Result<Symbol, String> {
+        let text = String::from_iter(buf);
+        match text.as_str() {
+            "AWAIT" => Ok(Symbol::Await(line, col)),
+
+            _ => Ok(Symbol::Ident(line, col, text.to_string()))
         }
     }
 
@@ -416,4 +441,40 @@ mod tests {
         let mut scanner = ActiveOberonScanner::new("&");
         assert_eq!(scanner.get_next_symbol(), Ok(Symbol::And(1,1)))
     }
+
+    #[test]
+    fn scanner_operator_left_paren() {
+        let mut scanner = ActiveOberonScanner::new("(");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::LeftParen(1,1)))
+    }
+
+    #[test]
+    fn scanner_comment_single() {
+        let mut scanner = ActiveOberonScanner::new("(* This is a single comment *)");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::EOF))
+    }
+
+
+
+
+
+    #[test]
+    fn scanner_keyword_await() {
+        let mut scanner = ActiveOberonScanner::new("AWAIT");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Await(1,1)))
+    }
+
+    #[test]
+    fn scanner_keyword_await_whitespace() {
+        let mut scanner = ActiveOberonScanner::new("  AWAIT");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Await(1,3)))
+    }
+
+    #[test]
+    fn scanner_indent_await__whitespace() {
+        let mut scanner = ActiveOberonScanner::new("  AWAIT_");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::Ident(1,3, "AWAIT_".to_string())))
+    }
+
+
 }
