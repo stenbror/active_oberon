@@ -1,4 +1,3 @@
-mod parser;
 mod scanner_active_oberon;
 
 fn main() {
