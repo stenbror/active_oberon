@@ -599,7 +599,7 @@ mod tests {
 
     #[test]
     fn scanner_operator_dot_greater() {
-        let mut scanner = ActiveOberonScanner::new(".<");
+        let mut scanner = ActiveOberonScanner::new(".>");
         assert_eq!(scanner.get_next_symbol(), Ok(Symbol::DotGreater(1,1)))
     }
 
