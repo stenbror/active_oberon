@@ -579,6 +579,30 @@ mod tests {
         assert_eq!(scanner.get_next_symbol(), Ok(Symbol::DotTimes(1,1)))
     }
 
+    #[test]
+    fn scanner_operator_dot_slash() {
+        let mut scanner = ActiveOberonScanner::new("./");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::DotSlash(1,1)))
+    }
+
+    #[test]
+    fn scanner_operator_dot_equal() {
+        let mut scanner = ActiveOberonScanner::new(".=");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::DotEqual(1,1)))
+    }
+
+    #[test]
+    fn scanner_operator_dot_unequal() {
+        let mut scanner = ActiveOberonScanner::new(".#");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::DotUnequal(1,1)))
+    }
+
+    #[test]
+    fn scanner_operator_dot_greater() {
+        let mut scanner = ActiveOberonScanner::new(".<");
+        assert_eq!(scanner.get_next_symbol(), Ok(Symbol::DotGreater(1,1)))
+    }
+
 
 
     #[test]
